@@ -88,3 +88,7 @@ typings/
 .dynamodb/
 
 .DS_Store
+
+backend/dist/
+
+backend/package-lock.json
