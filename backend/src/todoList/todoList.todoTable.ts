@@ -1,13 +1,18 @@
 import { Entity, Column, PrimaryColumn } from "typeorm"
 
-@Entity()
+@Entity("Todos")
 export class TodoTable {
-  @PrimaryColumn('varchar', { length: 140 })
-  content: string;
+  constructor(content: string, completed: boolean, createdAt: number){
+    this.content = content;
+    this.completed = completed;
+    this.createdAt = createdAt;
+  }
+    @PrimaryColumn('text', { nullable: false, length: 140, name: "Content" })
+    content: string
+    
+    @Column('boolean',{ nullable: false, name: "Completed" })
+    completed: boolean
 
-  @Column()
-  completed: boolean;
-
-  @Column('int')
-  createdAt: number;
-};
+    @Column('integer', { nullable: false, name: "CreatedAt"})
+    createdAt: number
+}
