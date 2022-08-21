@@ -15,7 +15,7 @@ open({
 
 @Injectable()
 export class SQLiteTodoRepository implements ITodoRepository {
-  _oldTodoList: Todo[]
+  _oldTodoList!: Todo[];
   constructor(){}
 
   // select, update, insert into, delete
@@ -36,7 +36,7 @@ export class SQLiteTodoRepository implements ITodoRepository {
       return !oldContents.includes(todo.content)
     });
     newTodos.forEach(newTodo => {
-      dbClient.exec(`INSERT INTO Todos VALUES("${newTodo.content}", ${Number(newTodo.completed)}, ${newTodo.createdAt})`)
+      dbClient?.exec(`INSERT INTO Todos VALUES("${newTodo.content}", ${Number(newTodo.completed)}, ${newTodo.createdAt})`)
     });
 
     const newContents = todoList.map(todo => todo.content);
@@ -44,7 +44,7 @@ export class SQLiteTodoRepository implements ITodoRepository {
       return !newContents.includes(todo.content)
     });
     deletedTodos.forEach(deletedTodo => {
-      dbClient.exec(`DELETE FROM Todos WHERE Content="${deletedTodo.content}"`);
+      dbClient?.exec(`DELETE FROM Todos WHERE Content="${deletedTodo.content}"`);
     });
     
     // old todo content에도 있는데 new todo에도 content 있다 그런데... 두 객체가 다르다면? update 된 거임
@@ -65,7 +65,7 @@ export class SQLiteTodoRepository implements ITodoRepository {
     })
     updatedTodos.forEach(updatedTodo => {
       console.log(updatedTodo)
-      dbClient.run(`UPDATE Todos SET Completed = (:completed) WHERE Content = (:targetContent);`, {
+      dbClient?.run(`UPDATE Todos SET Completed = (:completed) WHERE Content = (:targetContent);`, {
         ':completed': Number(updatedTodo.completed),
         ':targetContent': updatedTodo.content
       })
@@ -76,6 +76,9 @@ export class SQLiteTodoRepository implements ITodoRepository {
     // getAll을 구현... 쉬움
     // select
   
+    if(dbClient === undefined){
+      return [];
+    }
     const result = dbClient.all(`SELECT Content, Completed, CreatedAt FROM Todos;`)
       .then(result => result.map((row) => ({
         content: row.Content,

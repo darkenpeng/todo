@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { databaseProviders } from 'src/ormConfig';
 import { TodoListController } from './todoList.controller';
+import { FsTodoRepository } from './todoList.fsRepository';
 import { TodoListService } from './todoList.service';
 import { TypeOrmRepository } from './todoList.typeOrmRepository';
 
@@ -13,8 +15,9 @@ import { TypeOrmRepository } from './todoList.typeOrmRepository';
     },
     {
       provide: 'TODO_REPOSITORY',
-      useClass: TypeOrmRepository,
+      useClass: FsTodoRepository,
     },
+    // ...databaseProviders
   ]
 })
 export class TodoListModule {}

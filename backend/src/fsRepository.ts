@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
 
 const FILE_NAME = "todoList.json";
@@ -16,16 +17,16 @@ const fsRepository: ITodoRepository = {
     const json = await fs.readFile('./' + FILE_NAME, { encoding: 'utf-8' });  // json 문자열
     // todoList 배열, 객체로 변환
     return JSON.parse(json) as Todo[];
-    // const todoListPromise = fs.readFile('./' + FILE_NAME, { encoding: 'utf-8'});  // json 문자열
-    // return todoListPromise.then(json => JSON.parse(json) as Todo[]);
+    const todoListPromise = fs.readFile('./' + FILE_NAME, { encoding: 'utf-8'});  // json 문자열
+    return todoListPromise.then(json => JSON.parse(json) as Todo[]);
   }
 };
 
-// fsRepository.saveAll([{ "content": "미믹의 레포지토리!", "completed": false, "createdAt": 123 }])
-//   .then(() => {
-//     return fsRepository.getAll();
-//   })
-//   .then((data) => console.log(data));
+fsRepository.saveAll([{ "content": "미믹의 레포지토리!", "completed": false, "createdAt": 123 }])
+  .then(() => {
+    return fsRepository.getAll();
+  })
+  .then((data) => console.log(data));
 
 // 정리!
 // 세가지 종류 서버 todolist 를 만들기(express, fastify, )
